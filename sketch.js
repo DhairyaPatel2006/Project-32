@@ -11,16 +11,21 @@ var ground1, ground2;
 
 var block15, block16, block17, block18, block19, block20, block21;
 var block22;
-var sling;
+var slingshot;
 //var player;
 
 var ball;
 var img;
 
+var scores = 10;
+
 function preload(){
   img = loadImage("polygon.png");
-
+  img1 = loadImage("bg.png");
+  timing();
 }
+
+
 
 function setup() {
   createCanvas(1200,400);
@@ -52,7 +57,11 @@ function setup() {
 
   ground1 = new Ground(600,285,200,10);
   ground2 = new Ground(900,195,200,10);
-  //ground3 = new Ground(750, 600, 1500, 10)
+  ground3 = new Ground(600,400,1200,10);
+  ground4 = new Ground(600,0,1200,10);
+  ground5 = new Ground(1200,200,10,400);
+  ground6 = new Ground(0,200,10,400);
+
 
 
   block14 = new Block(900,170,30,40);
@@ -72,13 +81,21 @@ function setup() {
   ball = Bodies.circle(50,200,20);
   World.add(world,ball);
 
-  sling = new Chain(this.ball,{x:150, y:160});
+  slingshot = new Chain(this.ball,{x:150, y:160});
 
 }
 
 function draw() {
-  background("black");
+  if(timing())
+    background(img1);
   Engine.update(engine);
+
+  ground1.display();
+  ground2.display();
+  ground3.display();
+  ground4.display();
+  ground5.display();
+  ground6.display();
 
   fill(rgb(135, 205, 236));
 
@@ -87,21 +104,35 @@ function draw() {
   block3.display();
   block4.display();
   block5.display();
+  block1.score();
+  block2.score();
+  block3.score();
+  block4.score();
+  block5.score();
+
 
   fill("lightBlue");
   block6.display();
   block7.display();
   block8.display();
   block9.display();
+  block6.score();
+  block7.score();
+  block8.score();
+  block9.score();
 
   fill("lightPink");
   bolck10.display();
   block11.display();
   block12.display();
+  bolck10.score();
+  block11.score();
+  block12.score();
 
   fill("orange");
 
   block13.display();
+  block13.score();
 
   fill(rgb(135, 205, 236));
   block14.display();
@@ -109,39 +140,75 @@ function draw() {
   block16.display();
   block17.display();
   block18.display();
+  block14.score();
+  block15.score();
+  block16.score();
+  block17.score();
+  block18.score();
+
   fill("lightGreen");
 
   block19.display();
   block20.display();
   block21.display();
+  block19.score();
+  block20.score();
+  block21.score();
+
   fill("lime");
 
   block22.display();
+  block22.score();
 
-  ground1.display();
-  ground2.display();
-  
+ 
+
 
   imageMode(CENTER);
   image(img,ball.position.x,ball.position.y,40,40);
 
-  sling.display();
+  slingshot.display();
+
+  fill("yellow");
+    textSize(26)
+    text("score="+scores,1000,30)
 }
 
 
 function mouseDragged(){
+  //push();
   Matter.Body.setPosition(this.ball, {x: mouseX , y: mouseY});
+  //pop();
 }
 
 
 function mouseReleased(){
-  sling.fly();
+  //push();
+  slingshot.fly();
+  //pop();
 }
 
-/*function keyPressed(){
+function keyPressed(){
 	if(keyCode === 32)
 	{
-		Matter.Body.setPosition(player.body,{x:235, y:420})
-		chain.attach(player.body);
+		//Matter.Body.setPosition(ball.body,{x:235, y:420})
+		slingshot.attach(this.ball);
 	}
-}*/
+}
+
+
+async function timing(){
+  var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
+  var responseJson = await response.json();
+  //console.log(responseJson.datetime);
+  var datetime = responseJson.datetime
+  var hour = datetime.slice(11,13);
+  console.log(hour);
+  if(hour>06 && hour<17){
+      bg = "bg.png"
+  }
+  else{
+      bg = "bg2.jpg"
+  }
+
+  img1 = loadImage(bg);
+}

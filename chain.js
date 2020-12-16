@@ -3,7 +3,7 @@ class Chain{
         var options = {
             bodyA: bodyA,
             pointB: pointB,
-            stiffness: 0.3,
+            stiffness: 1,
             length: 10,
         }
         this.pointB = pointB
@@ -14,6 +14,11 @@ class Chain{
     fly(){
         this.sling.bodyA = null;
     }
+
+    attach(body){
+        this.sling.bodyA = body;
+        }
+        
 
     display(){
         if(this.sling.bodyA){
@@ -31,9 +36,6 @@ class Chain{
         }
     }
 
-    /* attach(body){
-    this.sling.bodyA = body;
-    }*/
     
 }
 
